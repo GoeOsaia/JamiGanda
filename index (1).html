@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Jami 💕</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+        }
+
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-cormorant {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Animations */
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(-40px) translateX(-10px); }
+            75% { transform: translateY(-20px) translateX(10px); }
+        }
+        
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.15; transform: scale(1.1); }
+        }
+        
+        @keyframes bounce-gentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+            20%, 40%, 60%, 80% { transform: translateX(8px); }
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(236, 72, 153, 0.8); }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10%, 30% { transform: scale(1.1); }
+            20%, 40% { transform: scale(1); }
+        }
+        
+        .animate-float-slow {
+            animation: float-slow linear infinite;
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse-slow 4s ease-in-out infinite;
+        }
+        
+        .animate-bounce-gentle {
+            animation: bounce-gentle 2s ease-in-out infinite;
+        }
+        
+        .animate-shake {
+            animation: shake 0.5s;
+        }
+        
+        .animate-twinkle {
+            animation: twinkle ease-in-out infinite;
+        }
+        
+        .animate-fade-in {
+            animation: fade-in 0.8s ease-out;
+        }
+        
+        .animate-slide-up {
+            animation: slide-up 0.8s ease-out;
+        }
+
+        .animate-glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .animate-heartbeat {
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        .blur-background {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .transition-600 {
+            transition: all 0.6s ease;
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        // SVG Icons
+        const HeartIcon = (className, fill = "none") => `
+            <svg class="${className}" fill="${fill}" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+        `;
+
+        const LockIcon = (className) => `
+            <svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+        `;
+
+        const CalendarIcon = (className) => `
+            <svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+        `;
+
+        const ChevronLeftIcon = (className) => `
+            <svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        `;
+
+        const ChevronRightIcon = (className) => `
+            <svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        `;
+
+        const SparklesIcon = (className) => `
+            <svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+        `;
+
+        const BookOpenIcon = (className) => `
+            <svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+        `;
+
+        const ClockIcon = (className) => `
+            <svg class="${className}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        `;
+
+        // State
+        let state = {
+            isDateUnlocked: false,
+            isPasswordUnlocked: false,
+            password: '',
+            shake: false,
+            currentPage: 0,
+            isFlipping: false,
+            timeToUnlock: {},
+            timeToValentines: {},
+            showContent: false
+        };
+
+        // Letters data
+        const letters = [
+            { day: 1, title: 'Day 1', content: `HAAHHAHA DAY 1 'to ng pagsusulat ko, and right now alam ko you're preparing na kasi may pasok ka HAHAHAHAHAH too bad hindi ako maiinggit right now na half-day ka kasi i skipped school… hay nako nakakainis kasi itong ubo't sipon ko HAHAHAHHAA galingan mo po sa recitation mo sa BF! and also your quizzes and report nyo po. I know na you're busy preparing for those and u were still able to make time for me, i appreciate that so so much jami. I like you and mag-iingat palagi okay? HAHAHAHA while writing this iniisip ko ung magiging reaction mo once na ma-send ko sa'yo 'to. Okay wiw, nakauwi ka na sabahay and you've shared me what happened sa araw mo. am very amazed by you, you truly are amazing jamii, and u even complaining sa nakuha mong 14/15? HAHAHAHAHAHAHAHHAHAHAHAHAHA, also was so happy to hear all your kwentos.Everyday spent with you is something i would treasure forever. It really is cool to think that, i was given this chance :3. Oh s'ha, GOODLUCKK AND GODBLESS!!` },
+            { day: 2, title: 'Day 2', content: `Ito DAY 2 HAHAHAHA kausap kita ngayon in call but hindi mo alm na sinusulat ko to, HAAHAHHA remember this : we played ung duck na nag-i-investigate HAHAHAHAHHA it was fun and memorable HAHAHAHAJJAHA i like playing it with you na tuloy. HAHAHHA ngayon din nasabi mo sa akin na nangangati ka na gumastos and you shared me ung mga nasa cart po, siempre full of make ups gaya ng naturale ba un ung nabili mo absidy, and others HAHAAHA and rigjt now we're sharing yung mga funny stories HAHAHAHA sa gastos HAHAHAHAHHAA hay nako andaming items sa cart mo. HAHAHAH u also shared how u would lie to tita about spending your money on buying PE shirt instead u spent it on gala HAHAHAHAHAH. AND AYUNN HEHEHE to add into thiss we playeddd 5vs5 kasama pinsan mo and kalaban natin pinsan mo and his classmates HAHAHAHAA ang galing talaga, galing mag-Novariaaa!!!!! Moment like thissss makess meee so so soooo happyy 🙈 i likee u a lott jamii HAHAHAHHA i know probably kumakain ka right now kaya eat well. HAHAHAHAA jamiii eto na siguro last na i add ko am sleepy na rin and its 2am na HAHAHAHA i just wanna thank u for sharing me those past experiences of yours, mga napagdaanan mo before, it helps me understand you more and i love that. i just wanna let you knoww na i do understand all of thatt okeyy? MWHEHEHE 👺❤️` },
+            { day: 3, title: 'Day 3', content: `Okayy day 3, today isn't that great well that's only for me. siguro i'd say worried akoo kasi alam ko po sa sarili ko na am overthinking stuffs. pero alam mo po, kahit na ganun well kinaya ko! kasi malakas akoo arghh! HAHAHAHAHA hey jamii alam ko ngayon araw, may nga nagawa ako na siguro i'd say hindi tama (sa paningin ko na sa sarili ko) mwhehehe kasi you know am very competitive po lalo na't when it comes to proving what i am , what i can do. it so happen that i was just disappointed at myself tonight, sa nangyari yes, ngayon gabo ung pinaka tumatak sa isipan ko ngayong araw, kasi you know po wala, ngayong araw nag-overthink ako, na-disappoint sko sa sarili ko and moreover that i had this fear na baka ikaw rin na disappoint ko. pero thank you jami alam ko sinabi mo na dapat hindi ka na magcha-chat and matutulog ka na pero u stayed, u listend, u opened up and allowed me in. Thankk u jamii kasi dahil don na letout ko ung gusto ko sabihin, i know imthis kind of guy na mahina oagdating dyan pero ikaw ung nagbibigay lakas sa akin kahit mahirap. HWHHEHEHEHEHEH and opo, this is noted na alam kong ayaw mo yung nagawa kong 'yan and it is something i'll remind myself to avoid. Kasi i consider you, i consider yung mga mafifeel mo and allat. thank u jamii, hehehe kahit na ngayong araw nasbai mong hyper ka kanina pero may kapalit pala which is ung nangyari ngayon gabi. alam ko naiyak ako while saying stuffs in call naiyak ako while u listen HAHAHAHAHAHA hayy nakoo what i childish thing na nagagawa ko, per im glad i was able to let out whatever is on my mind, im glad that i stayed and siempre masaya ako kasi napagaan ko ang pakiramdam ko in someway :pp. i like u ganda😇🫶🏽` },
+            { day: 4, title: 'Day 4', content: `HAHAHAHHA HELOOO JAMII MAAGA-AGA AKO NAGISING NGAYON AND ALAM KO PROBABLY TULOG KA PA PO MWHEEHE. I just really hope na what happened last night, it won't affect ur day any better. I hope and i pray that we continue to learn and alsoooo slowly , little by little . I hope you're gonna wake up feeling lighter and better, alam mo last night when u were asleep HAHAHHAA may sinabi pa ako sa'yo nun. MHEHEEHEE it's just that am very happy and siempre very blessed to have you okay ima end this hereee and will be back later. HELOOO AGAIN JAMII mwehhehee nag-open ako sa mlbb and sabi ni Ian kanina sa akin na kumakain ka na raw and dass good! mahehehe good afternooon prettyyyy! alam ko you'll be busy today, i didn't wanna bother u kaya i didn't chat until tou were free. siempre ill be waiting for you patiently mwhehehe. Heyy jamii am back again, am writing this kasi alam ko po just now we barely talked, and das okayy das part of growing together HAHAHAHA okay im being so oa na here but yeahh! I really am just yk i wanna make sure na you're okay and you're not pressured by the stuffs today. i likee u a lot jamiii. My care for you stays, it doesn't depend on the mood :ppp whatever the mood is, it won't affect what i feel for you. okay das all! HELOOO JAMII SO HAPPYYY THAT I GOT TO PLAYY MLBB WITH YOUU 🙈. Thank u for making time for me HAHAHHAHAHA for making me feel so so happy. i really am happy brcause i got to play wih you not only mlbb but also roblox HAHAAHAH i enjoyed my timeeeeeee with youuu jamiii and GOOD EVENINGG. HAHAHAHA OKAY ito na ung last siguro na sulat for tonight, nasabi ko sa'yo na kater ako matutulog kasi may sinusulat oa ako and this is it 😇. i just wanna let you know that i'm really thankful to have yoh, you know before u even sleep ngayon our little talks :ppp made me feel so happy and secure. You're my safe space jamii 🫶🏽 . I know u mentioned na para akong nagda-drunk text sa mga sinasabi ko in call HAHAHA well that's hust me being true, that's just me letting out all my heart aants to express. HAHAHAHAHAHA i can't even explain how happy i am tonight, i hope you'll sleep with great smiler arghhh pinakikilig mo akooo waaahh. I'll forever treasure this jami ❤️ thank u for even calling me your baby 😏 HAHAHAHAHAAH good nighttt pretty.` },
+            { day: 5, title: 'Day 5', content: `Helooo jamiii HAHAHAHAHA paggising ko talaga bumungad 'yung no wi-fi connection signal waaaahhh.WAAAH ang hirap pag walang wi-fi connection, i should be updating you right now pero instead im writing this HAHAHAHAHHAA wala kasii signal ion know whyy. siguro dahil may inaayos ang PLDT PERO HOPEFULLY BY LATER MAYRON NA. Kaya rin na-end siguro 'yung call natin dahil don sa biglang pagkawala ng wi-fi connection. PLDT is sometimes annoying arghhhh. HAHAHAHAHAHA oh alam kong natutulog ka pa kaya have a great night sleep jami. Good morninggg palaa mwhehehehe, iniisip ko kung ano magiging reaction mo sa isesend kong mga 'to. it's already day 5 of me writing these letters to you and i just wanna tell you that i really appreciate youu jamii. Thank you for always being here kahit ang kulit - kulit ko HAHAHAHA sana hindi ka magsawa sa akin. ILIKEE YOUUU JAMII ❤️ i'm grateful to have you, alam mo palagi ko na lng naiisip kung gaano ako ka-bless kasi i have you :)).\n\nOKAY UWIAN NA GALING SCHOOL , I REALLY AM EXCITED TO KNOW KUNG MAYRON NA WI-FI AAAAAAAA SANA MAYRON NA. -Okay wiw wala pa rin AAAA bakit ganito HAHAHAHHAHAA hay nako PLDT i really wasn't expecting na wala pa rin hanggang ngayon argh.` },
+            { day: 6, title: 'Day 6', content: `AAAA i really thought magkakaroon na ng wi-fi connection but turns out wala pa rin aaaaaa ano na gagawin ko nito HAHAHAHHAHAHA oh my days ang hirap 😔 . Why is it like this oh my dayss. MWHEHEHEHE kahit na ganyan pa man, STILL GOOD MORNINGG JAMII. Thank you for understanding my situation right now, i can't wait to make my bawiii. Okayyy IM HERE SA taas and nakatambay ako here right now. grabeee ang sarap pala tumambay ditoooo ang lamig and siempre may wi-fi connection here HAHAAHAHAHHAHAH. I really am glad that i could make my bawi sa'yo, i told you i'll makemy bawi mwhehehe. So glad that we could play MLBB and ngayon, nasa call tayo HAAHAH. i know you're not aware of me writing this but yeahhhhh! i like you a lot jamii, thank you for being here tonight with me, i missed your voice so so soooo much HAHAHAHHAHA totoo 'yan.\n\nGood nightt gandaaa AHAHAHAHAH inabot nanaman. tayo ng midnight, oh babalik na rin ako sa room ko laterr mwhehehehe nasa stiars pa ako eh, sleep tightly!` },
+            { day: 7, title: 'Day 7', content: `WAAH NGAYON NAMAN WALANG ELECTRICITY HAHAHAHAHHA scheduled po 'to kasi buong Baguio mawawalan to fix ung spaghetti wirings (i remember nasabi ko ito nung we were in call last night) MWHEHEHE pero i think babalik siya 5pm. HINDI PA AKO NAKAKALIGO and it's already 7 waaaaaaaa. nagising na ako kaninang 5+ ion remember the exact time pero 😔 ayun ngaaa hindi ako nakaligo noong may kuryente pa. kaya ngayon im surely gonna be late for class or i mig even miss first class WAAA i couldn't shower kasi walang heater. AND GOSH ANG LAMIG SA LABAS NGAYON HAHAHAHAHAHHAHAHAHAH. sa school na lng ako mag breakfast! AAA HAHAHAHAHHAHA\n\nOkauyy nakauwi na me galing school ngayon HEHEHEH and later yk andami ko kwentoo sayo HAHAHAHHAHAHAHAHHA may it be fun or boring basta ma kwento ko 🤭❤️. Waaaaa nag-early dinner ako kasama sina kuya here kasi birthday ni ate nelia (ung nagbabantay sa amin) MWHEHEHEHEH. Helooooo jamiii i'm writing this naman as u are expressing what you're feeling right now, alam ko po filled with confusion yan but know that i'll do my best to explain and understand you ❤️. MWHEHEHEE it's 12:33 na and i likee u jamii, prolly you're asleep na kaya i hope you'll have a great night sleep. see u tomorrow ganda` },
+            { day: 8, title: 'Day 8', content: `😮‍💨 Jamiii thursday naaaaa yesss!!! HAHAHAHAHA waaaahh this week, is kind of a hell week pero malapit na magtapos 'tong week na to MWHEEHEHE. FINALLY AAAAA i can't wait na matapos 'tong week na 'to. Yk jamii looking back… wow day 8 na 'tong pagsulat ko ng letter waaaahhhh, i can't believe that i get to the something like this. All thanks to you jamiii. Alamko na baka puro nonsense 'tong pinagsasabi ko, it may sound like that pero no mwhehehehe ganito talaga ako… i told myself that i would write all this so that i could show how special u are from me :pp. i know that sometimes we get to experience hardships but thankk u jamii for always understanding me. I enjoyedddd my time with you jamii, thank you for your time. I hope you'll have a great sleep tonight, alam ko naman na pagod ka at u deserve good sleep!!` },
+            { day: 9, title: 'Day 9', content: `WAAHHH AM WRITING thisss 2:35 AM na HAHAHAHAHA NAKATULOG KASI AKO ARGHH. I really am sorry bigla ako nawala kanina jami, it's just that nakatulog ako in a way na hindi ko ine-expect 😔. Sorry for leaving you like that, but ill make sure that i can make my bawi sa'yo. Siguro later din matutulog na ako mwehhehe hopefully makatulog ako kasi ang haba ng naging tulog ko. simula 6PM nakatulog na ako HAHAHAHA oh my gahd. Oh alam kong paparating na 'yung PUP entrance test mo 🤭 alam kong kayang-kaya mo 'yan! ikaw pa? diba HASHAHHAA goodluck jamii and God bless. Sana alam mo na lagi lng ako andito para sa'yo, cheering you from a far ba mwheehehe. Naglalaro sana tayo kanina pero ano nangyari nakatulog ako AAAA i hate this aarghhhh :((( nasayang ko 'yung time para makapag-play man tayoo kasi alam ko tomorrow you'll be busy . but yk what its okey mwhehehe at least today, u had time para makapag-review ka pa rin and time for yourself too. Thank youu jamii, sana hindi mo ako pagalitan bukas paggising ko ❤️ HAHAHAHA I LIKE YOU gandaa!\n\nYEYYY thank you for ur time jamii, kahit na natulugan kita last night, u still made time for us to play. I really had a great timee tonight, win streak tayo oh 🙈🙈🙈 yahooo HAHAHHAHAHAHA. thank u sa buhatt jamiii. Good nighttt, alam ko antok ka na and andddd tomorrow na rin ung PUP CET mo, i know u can do it ganda! have a great night sleep and get a good rest.` },
+            { day: 10, title: 'Day 10', content: `(Combined with Day 9 - Win streak celebration and PUP CET preparation!)\n\nYEYYY thank you for ur time jamii, kahit na natulugan kita last night, u still made time for us to play. I really had a great timee tonight, win streak tayo oh 🙈🙈🙈 yahooo HAHAHHAHAHAHA. thank u sa buhatt jamiii. Good nighttt, alam ko antok ka na and andddd tomorrow na rin ung PUP CET mo, i know u can do it ganda! have a great night sleep and get a good rest.` },
+            { day: 11, title: 'Day 11', content: `Oh my days! Happy Sunday jamiiii! And today's the day YESSS HAHAHAHAHHAHAHAHA goodluck on ur PUP CET jamii, i know u can do it. Lahat ng pagod mo, worth it! I hope that later u won't be pressuring urself much. Alam ko ngayon u're still having ur final review kaya take ur time lng dyan HAHAHAHHAHA hindi mo man alam na sinusulat ko 'to but yeahhh! I likee u jamii and just know that am cheering u from here. Do ur bestt gandaa and God will do the rest! Mag-iingat po kayo laterr jamiii.\n\nFinally! You've mentioned na natapos na 'yung entrance test mo po nwhehehe and im really proud of u jamii, i saw all ur hard work lahat ng binuhos mong time sa pag-review :pp just know that all that will be worth it. Greatt job todayy ganda, am really happyyy!` },
+            { day: 12, title: 'Day 12', content: `Helooo jamiii 😼 HAHAHAHAHA honestly today felt slow pero at the same time parang ang daming nangyari sa loob ng isip ko. Alam mo 'yung mga araw na wala namang masamang nangyari pero biglang mapapaisip ka lang ng "grabe no, nandito pa rin tayo." And weird kasi im smiling habang iniisip ka. I kept replaying kanina 'yung moment after your PUP CET, 'yung relief sa boses mo, 'yung pagod pero proud ka sa sarili mo. I'm really really proud of you, kahit ilang beses ko pa sabihin 'yan. Kahit ano mang lumabas na results, I hope you know you did your best, and that's already more than enough for me. Thank you for letting me be part of that day, kahit sa simpleng messages lang. I like you so much, jamiii.` },
+            { day: 13, title: 'Day 13', content: `HAHAHAHA jamiii alam mo ba today tinamaan nanaman ako ng pagiging sentimental. I was thinking how random all of this started. Like imagine, out of all people, out of all situations, it's you. And ngayon, here I am writing letters for you like a weirdo HAHAHAHA. Pero hindi ko pinipilit 'to ha. It just happens. I find myself wanting to check on you, wanting to hear about your day, wanting to know if you ate, if you're okay. I like how natural it feels. Walang pilit, walang pressure. Just me, choosing you everyday. Sana hindi ka mapagod sa ganito kong lambing. Promise I'm trying my best to be better, slowly.` },
+            { day: 14, title: 'Day 14', content: `HELLOOOO JAMIII Today medyo tahimik tayo pero okay lang. I'm learning na hindi lahat ng araw kailangan puno ng usap. Sometimes, just knowing you're there is enough. I like that kind of comfort. 'Yung hindi ka obligated mag-entertain, pero you still choose to stay. I hope you don't feel pressured by me ha. I'm not here to drain you. I just wanna be someone you can rest with. If ever mapagod ka, tell me. I'll understand. I care about you more than my own kulit.` },
+            { day: 15, title: 'Day 15', content: `HAHAHAHA jamiii today naalala ko 'yung mga kwento mo, 'yung mga maliliit na details na akala mo hindi ko pinapansin pero naka-store pala sa utak ko. 'Yung mga gusto mo, ayaw mo, mga simpleng bagay na nagpapasaya sa'yo. I like knowing those things. It makes me feel closer to you. I know we're still learning each other, may mga misunderstanding, may mga sablay moments, pero I'm thankful we always find our way back to understanding. Thank you for your patience with me. Alam kong magulo ako minsan.` },
+            { day: 16, title: 'Day 16', content: `Jamiii today napaisip ako… what if someday basahin mo lahat ng 'to in one sitting? Baka matawa ka, baka maiyak ka, baka masabi mong "grabe ka talaga." Pero gusto kong malaman mo na bawat word dito, totoo 'yan. Hindi 'to gawa-gawa. These letters are pieces of my days, and ikaw lagi ang laman. Kahit simpleng araw lang, nagiging special kasi ikaw 'yung iniisip ko. I don't know where this will lead us exactly, pero I know I'm happy walking this path with you.` },
+            { day: 17, title: 'Day 17', content: `HELLOOOO JAMIII 🤍 🫶🏽 hehehe alam mo Today I felt thankful. Thankful kasi kahit hindi perfect lahat, we choose to communicate. Thankful kasi you try to understand me kahit ang gulo ng explanations ko minsan. Thankful kasi you don't invalidate my feelings, and you let me feel safe being soft around you. That's rare for me. You don't even realize how much that means. I hope I'm making you feel the same way too.` },
+            { day: 18, title: 'Day 18', content: `HAHAHAHA jamiii random thought lang… ang saya pala magmahal nang ganito. Hindi rushed. Hindi pilit. Just steady. I like how we grow little by little. May days na clingy ako, may days na tahimik ka, may days na pareho tayong pagod. Pero nandito pa rin tayo. I don't take that lightly. I promise I won't get comfortable in a bad way. I'll keep choosing you, keep showing up, kahit sa maliliit na paraan.` },
+            { day: 19, title: 'Day 19', content: `Jamiii if ever dumating 'yung araw na magdoubt ka sa sarili mo, sa worth mo, sa galing mo, sana maalala mo na may isang taong sobrang bilib sa'yo. Hindi dahil perfect ka, kundi dahil ikaw ka. I admire your strength, even when you don't see it. I admire how you still try kahit takot ka. Please don't be too hard on yourself.` },
+            { day: 20, title: 'Day 20', content: `HAHAHAHA day 20 na 'to oh my days. Ang lapit na ng Feb 14. Hindi ko alam ano magiging reaction mo pag nabasa mo lahat ng 'to, pero I hope maramdaman mo kung gaano ka kahalaga sa'kin. Hindi lang sa special days, kundi sa ordinary days din. I like you on random Tuesdays, boring Wednesdays, pagod Fridays. Lahat 'yan.` },
+            { day: 21, title: 'Day 21', content: `Hello jamiii. Today medyo tahimik lang ang mundo ko. Hindi naman malungkot, hindi rin sobrang saya. Sakto lang. Pero kahit ganon, ikaw pa rin 'yung iniisip ko. I was doing random things kanina, tapos bigla na lang pumasok sa isip ko na "ah, ganito pala kapag may taong gusto mong i-update kahit wala ka namang update." Gusto ko lang sabihin sa'yo kung anong kinakain ko, kung anong iniisip ko, kung pagod ba ako o hindi. Ang simple pero ang bigat sa puso sa magandang paraan. I like this feeling. Hindi siya overwhelming. Tahimik lang pero totoo.` },
+            { day: 22, title: 'Day 22', content: `Jamiii today napaisip ako sa mga pinagdaanan natin nitong mga nakaraang araw. 'Yung mga misunderstandings, 'yung moments na pareho tayong gulong-gulo, 'yung mga oras na kailangan talaga nating mag-usap kahit pagod na. Hindi madali pero pinipili pa rin natin isa't isa. That alone says so much. Alam kong magulo akong tao minsan, alam kong maraming ingay sa loob ng utak ko, pero thank you kasi hindi ka agad sumusuko sa pag-intindi. I'm trying my best din, kahit mabagal.` },
+            { day: 23, title: 'Day 23', content: `Hello jamiii. Ngayon ko mas narealize na hindi pala lahat ng care kailangan malaki. Minsan sapat na 'yung simpleng "kumain ka na ba" o "okay ka lang ba." Sapat na 'yung maramdaman mong may taong may pakialam kahit busy, kahit pagod. Thank you kasi kahit maraming ginagawa, you still make space for me. Hindi ko 'yan minamaliit. Hindi ko 'yan kakalimutan.` },
+            { day: 24, title: 'Day 24', content: `Jamiii may mga moments today na parang gusto ko lang huminto saglit. Hindi dahil ayoko na, pero dahil pagod lang talaga. At sa mga ganong oras, ikaw 'yung iniisip ko. Hindi bilang solusyon, kundi bilang pahinga. Ang gaan sa pakiramdam na may taong pwede mong takbuhan kahit sa isip mo lang. I hope one day, maramdaman mo rin 'yung ganoong comfort sa'kin.` },
+            { day: 25, title: 'Day 25', content: `Hello ulit jamiii. Napapangiti ako habang sinusulat 'to kasi parang ang tagal na nating magkakilala kahit technically hindi pa naman. Pero ganon siguro kapag genuine 'yung connection. Hindi minamadali, pero malalim. I like how we're slowly learning each other. Hindi perfect, may sablay, may tampuhan, pero may effort. And for me, effort matters.` },
+            { day: 26, title: 'Day 26', content: `Jamiii kanina napaisip ako sa future, hindi 'yung sobrang layo, kundi 'yung simpleng "sana ganito pa rin tayo." Sana open pa rin, honest pa rin, at willing pang mag-adjust para sa isa't isa. Alam kong maraming pwedeng mangyari, pero I want you to know na hangga't nandito ako, pipiliin kong mag-stay at umintindi kaysa tumakbo.` },
+            { day: 27, title: 'Day 27', content: `Hello jamiii. Today gusto lang kitang pasalamatan ulit. Pasensya na kung paulit-ulit ako, pero hindi nauubos 'yung gratitude ko sa'yo. Thank you for being patient. Thank you for being honest kahit mahirap. Thank you for letting me see parts of you na hindi mo basta-basta pinapakita. I value that so much.` },
+            { day: 28, title: 'Day 28', content: `Jamiii may mga oras talaga na natatakot ako. Natatakot ako na baka one day maging too much ako, na baka mapagod ka sa kakaisip ko, kakaramdam ko. Pero kahit may takot, pinipili ko pa ring maging totoo sa'yo. Ayoko magpanggap na okay lang palagi. I want us to grow nang walang tinatago.` },
+            { day: 29, title: 'Day 29', content: `Hello jamiii. Kanina may mga maliit na bagay na nagpapaalala sa'yo sa'kin. Isang kanta, isang random thought, isang tahimik na moment. Nakakatawa kung paano ka sumisingit sa araw ko nang hindi mo alam. Pero hindi ako nagrereklamo. I actually like it.` },
+            { day: 30, title: 'Day 30', content: `Jamiii 30 days na 'to ng pagsusulat ko para sa'yo. Hindi ko akalain na aabot ako dito. Pero here I am. Still writing. Still choosing. Still caring. Sana pagdating ng araw na mabasa mo lahat ng 'to, maramdaman mo kung gaano ka kahalaga sa'kin, hindi lang sa salita kundi sa consistency.` },
+            { day: 31, title: 'Day 31', content: `Hello jamiii. Ngayon mas kalmado ako. Mas klaro ang isip ko. At sa kalmadong 'to, ikaw pa rin ang pinipili ko. Hindi dahil kailangan, kundi dahil gusto. Sana maramdaman mo 'yon araw-araw.` },
+            { day: 32, title: 'Day 32', content: `Jamiii gusto ko lang sabihin na proud ako sa'yo. Sa mga ginagawa mo, sa mga pinagdadaanan mo, sa lakas mo kahit pagod ka na. Hindi mo kailangan patunayan kahit kanino na kaya mo. Kita ko na.` },
+            { day: 33, title: 'Day 33', content: `Hello jamiii. Malapit na ang Feb 9. At habang papalapit, mas nagiging malinaw sa'kin kung bakit ko sinimulan 'to. Hindi lang para sa Valentine's. Kundi para ipaalala sa'yo at sa sarili ko na ang pagmamahal, pinapakita araw-araw, kahit walang okasyon.` },
+            { day: 34, title: 'Day 34', content: `Jamiii kung may isang wish ako ngayon, 'yon ay sana palagi kang maging gentle sa sarili mo. Sana huwag mong maliitin ang worth mo. Sana kapag napapagod ka, maalala mong may taong naniniwala sa'yo nang buo.` },
+            { day: 35, title: 'Day 35', content: `Hello jamiii. May mga araw na tahimik lang tayo, pero okay lang. Hindi lahat kailangang punuin ng salita. Minsan sapat na 'yung presensya. At gusto kong maging ganoon sa'yo. Isang taong hindi kailangang pilitin, pero laging nandiyan.` },
+            { day: 36, title: 'Day 36', content: `Hello jamiii. Habang papalapit nang papalapit ang Feb 14, mas lalo kong naiintindihan kung bakit ko talaga sinimulan itong pagsusulat para sa'yo. Hindi lang pala ito simpleng challenge sa sarili ko na magsulat araw araw, kundi naging paraan din siya para maipon ko lahat ng nararamdaman ko na minsan hindi ko masabi nang diretsahan. May mga bagay kasi na mas nagiging malinaw kapag sinusulat, mas nagiging totoo kapag pinagninilayan mo. At sa bawat araw na lumipas, ikaw at ikaw pa rin ang laman ng mga pahinang ito. Hindi dahil wala na akong ibang iniisip, kundi dahil ikaw ang pinaka gusto kong isipin. Ang dami na nating pinagdaanan kahit maiksi pa lang ang panahon, may saya, may kaba, may pagkalito, may mga gabing halos hindi tayo makatulog kakaisip at kakaramdam. Pero kahit ganon, nandito pa rin tayo. Hindi perpekto, hindi sigurado sa lahat, pero hindi rin sumusuko. Gusto kong malaman mo na hindi ko tinitingnan ito bilang basta phase lang o panandalian. Pinahahalagahan ko bawat araw na pinipili mong manatili, bawat oras na binibigay mo sa akin kahit pagod ka, kahit marami kang iniisip. Sana kapag nabasa mo ito, maramdaman mo na hindi ka nag iisa sa lahat ng nararamdaman mo. May isang taong tahimik na pumipili sa'yo araw araw, kahit hindi mo hinihingi, kahit hindi mo alam. Ikaw iyon, jami.` },
+            { day: 37, title: 'Day 37', content: `Hello jamiii. Bukas na ang Feb 14. Hindi ko alam kung ano mararamdaman mo kapag nabasa mo lahat ng ito, kung matutuwa ka ba, mahihiya, matatawa, o baka ma overwhelm. Pero anuman ang maramdaman mo, sana ang pinaka makarating sa'yo ay ito, sincere lahat ng isinulat ko. Walang pilit, walang plano para mag impress, walang script. Ikaw lang talaga ang dahilan kung bakit umabot ako sa Day 37. Kung hindi ka naging ikaw, hindi ko rin magagawa ito. Marami pa ring uncertainties, hindi pa natin alam kung saan hahantong ang lahat, pero alam kong totoo ang nararamdaman ko ngayon. Hindi siya perpektong pagmamahal na nakikita sa pelikula, hindi rin engrande, pero steady siya. Tahimik pero matibay. Ikaw ang pahinga ko sa magulong araw, ikaw ang dahilan kung bakit nagiging mas magaan ang mga ordinaryong sandali. Kahit malayo, kahit hindi natin magawa ang mga typical na ginagawa ng mga magkasama, ramdam ko pa rin na may koneksyon na hindi mababaw. Salamat dahil hinayaan mo akong makilala ka, salamat dahil hindi mo ako tinaboy kahit magulo ako, kahit madalas akong mag overthink, kahit minsan hindi ko alam kung paano ipapaliwanag ang sarili ko. Kung may isang bagay akong hihilingin, iyon ay sana manatili ka lang. Hindi kailangan ng pangako, hindi kailangan ng sagot agad. Presensya mo lang, sapat na. Happy almost Valentine's Day, jami. Kahit ano pa ang mangyari, pipiliin pa rin kitang isipin nang may ngiti.` }
+        ];
+
+        // Calculate time remaining
+        function calculateTimeRemaining(targetDate) {
+            const now = new Date();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                return { days: 0, hours: 0, minutes: 0, seconds: 0, total: 0 };
+            }
+
+            return {
+                days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+                seconds: Math.floor((diff % (1000 * 60)) / 1000),
+                total: diff
+            };
+        }
+
+        // Update timers
+        function updateTimers() {
+            const unlockDate = new Date('2026-02-14T00:00:00');
+            const valentinesDate = new Date('2026-02-14T00:00:00');
+            
+            state.timeToUnlock = calculateTimeRemaining(unlockDate);
+            state.timeToValentines = calculateTimeRemaining(valentinesDate);
+            
+            // Auto-unlock when it's Feb 14
+            if (state.timeToUnlock.total <= 0) {
+                state.isDateUnlocked = true;
+            }
+            
+            render();
+        }
+
+        // Handle password submit
+        function handlePasswordSubmit(e) {
+            e.preventDefault();
+            if (state.password === 'Jamella') {
+                state.isPasswordUnlocked = true;
+                setTimeout(() => {
+                    state.showContent = true;
+                    render();
+                }, 300);
+            } else {
+                state.shake = true;
+                setTimeout(() => {
+                    state.shake = false;
+                    state.password = '';
+                    render();
+                }, 500);
+            }
+            render();
+        }
+
+        // Navigate pages
+        function goToPage(pageNum) {
+            if (state.isFlipping) return;
+            state.isFlipping = true;
+            state.currentPage = pageNum;
+            setTimeout(() => {
+                state.isFlipping = false;
+                render();
+            }, 600);
+            render();
+        }
+
+        // Render date lock screen
+        function renderDateLockScreen() {
+            const t = state.timeToUnlock;
+            return `
+                <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+                    <!-- Blurred background elements -->
+                    <div class="absolute inset-0 overflow-hidden blur-background">
+                        ${Array(30).fill(0).map((_, i) => `
+                            <div class="absolute rounded-full bg-white animate-twinkle" style="
+                                width: ${1 + Math.random() * 2}px;
+                                height: ${1 + Math.random() * 2}px;
+                                top: ${Math.random() * 100}%;
+                                left: ${Math.random() * 100}%;
+                                animation-delay: ${Math.random() * 3}s;
+                                animation-duration: ${2 + Math.random() * 3}s;
+                            "></div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Lock content -->
+                    <div class="relative z-10 text-center max-w-2xl mx-auto">
+                        <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-10 md:p-14 shadow-2xl border border-white/20 animate-fade-in">
+                            <!-- Clock icon -->
+                            <div class="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-pink-500 via-purple-500 to-green-500 rounded-full mb-8 shadow-2xl animate-glow">
+                                ${ClockIcon('w-16 h-16 text-white animate-bounce-gentle')}
+                            </div>
+
+                            <!-- Title -->
+                            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 font-playfair animate-heartbeat">
+                                Coming Soon
+                            </h1>
+
+                            <div class="mb-8">
+                                <p class="text-2xl md:text-3xl text-purple-300 mb-2 font-cormorant">
+                                    Wait until February 14, 2026
+                                </p>
+                                <p class="text-lg text-pink-300 font-cormorant">
+                                    at 12:00 AM
+                                </p>
+                            </div>
+
+                            <!-- Countdown timer -->
+                            <div class="grid grid-cols-4 gap-4 mb-8">
+                                ${[
+                                    { value: t.days, label: 'Days', color: 'from-pink-500 to-pink-600' },
+                                    { value: t.hours, label: 'Hours', color: 'from-purple-500 to-purple-600' },
+                                    { value: t.minutes, label: 'Minutes', color: 'from-green-500 to-green-600' },
+                                    { value: t.seconds, label: 'Seconds', color: 'from-pink-500 to-pink-600' }
+                                ].map(item => `
+                                    <div class="text-center">
+                                        <div class="bg-gradient-to-br ${item.color} rounded-2xl p-4 md:p-6 mb-2 shadow-xl">
+                                            <div class="text-4xl md:text-5xl font-bold text-white font-playfair">
+                                                ${String(item.value).padStart(2, '0')}
+                                            </div>
+                                        </div>
+                                        <div class="text-sm md:text-base font-semibold text-white/80 font-cormorant">
+                                            ${item.label}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+
+                            <!-- Message -->
+                            <div class="bg-white/5 rounded-2xl p-6 border border-white/10">
+                                <p class="text-white/90 text-lg md:text-xl font-cormorant leading-relaxed">
+                                    Something special is waiting for you, Jami 💕<br>
+                                    <span class="text-pink-300">Just a little more patience...</span>
+                                </p>
+                            </div>
+
+                            <!-- Hearts -->
+                            <div class="mt-8 flex items-center justify-center gap-3">
+                                ${HeartIcon('w-6 h-6 text-pink-400 animate-pulse', 'currentColor')}
+                                ${HeartIcon('w-8 h-8 text-purple-400 animate-pulse', 'currentColor')}
+                                ${HeartIcon('w-6 h-6 text-green-400 animate-pulse', 'currentColor')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render password screen
+        function renderPasswordScreen() {
+            return `
+                <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" style="background: linear-gradient(135deg, #2d5016 0%, #4a7c59 50%, #2d5016 100%);">
+                    <!-- Floating hearts -->
+                    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+                        ${Array(20).fill(0).map((_, i) => `
+                            <div class="absolute animate-float-slow" style="
+                                left: ${Math.random() * 100}%;
+                                top: ${Math.random() * 100}%;
+                                animation-delay: ${Math.random() * 5}s;
+                                animation-duration: ${15 + Math.random() * 10}s;
+                                opacity: 0.1;
+                            ">
+                                ${HeartIcon('w-8 h-8 text-white', 'white')}
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Glowing orbs -->
+                    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-green-300 rounded-full opacity-10 blur-3xl animate-pulse-slow"></div>
+                        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-300 rounded-full opacity-10 blur-3xl animate-pulse-slow" style="animation-delay: 2s;"></div>
+                    </div>
+
+                    <!-- Lock card -->
+                    <div class="relative z-10 ${state.shake ? 'animate-shake' : ''}">
+                        <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-10 md:p-14 max-w-md w-full shadow-2xl">
+                            <div class="text-center mb-8">
+                                <!-- Lock icon -->
+                                <div class="relative inline-block mb-6">
+                                    <div class="absolute inset-0 bg-green-500 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+                                    <div class="relative flex items-center justify-center w-28 h-28 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full shadow-xl">
+                                        ${LockIcon('w-14 h-14 text-white animate-bounce-gentle')}
+                                    </div>
+                                </div>
+
+                                <!-- Title -->
+                                <h1 class="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent font-playfair">
+                                    For Jami
+                                </h1>
+                                
+                                <div class="flex items-center justify-center gap-2 mb-4">
+                                    ${HeartIcon('w-5 h-5 text-pink-500 animate-pulse', 'currentColor')}
+                                    ${HeartIcon('w-6 h-6 text-pink-500 animate-pulse', 'currentColor')}
+                                    ${HeartIcon('w-5 h-5 text-pink-500 animate-pulse', 'currentColor')}
+                                </div>
+
+                                <p class="text-gray-600 text-lg leading-relaxed font-cormorant">
+                                    Your 37 days of love letters await...<br />
+                                    Enter the password to unlock
+                                </p>
+                            </div>
+
+                            <form onsubmit="handlePasswordSubmit(event)" class="space-y-6">
+                                <div class="relative">
+                                    <input
+                                        type="password"
+                                        value="${state.password}"
+                                        oninput="state.password = this.value"
+                                        placeholder="Enter password..."
+                                        class="w-full px-6 py-4 bg-green-50 border-2 border-green-200 rounded-2xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-green-500 focus:bg-white transition-all text-lg font-cormorant"
+                                        autofocus
+                                    />
+                                    ${SparklesIcon('absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-400')}
+                                </div>
+                                
+                                <button
+                                    type="submit"
+                                    class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold py-4 px-8 rounded-2xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 font-cormorant text-lg"
+                                >
+                                    Unlock Love Letters 💌
+                                </button>
+                            </form>
+
+                            <div class="mt-8 text-center text-gray-500 text-sm font-cormorant">
+                                Crafted with love by Geo
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render main content
+        function renderMainContent() {
+            const letter = letters[state.currentPage];
+            const t = state.timeToValentines;
+            const opacity = state.showContent ? 'opacity-100' : 'opacity-0';
+            
+            return `
+                <div class="min-h-screen p-4 md:p-8 relative overflow-hidden transition-opacity duration-500 ${opacity}" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+                    <!-- Decorative background -->
+                    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                        ${Array(30).fill(0).map((_, i) => `
+                            <div class="absolute rounded-full bg-white animate-twinkle" style="
+                                width: ${1 + Math.random() * 2}px;
+                                height: ${1 + Math.random() * 2}px;
+                                top: ${Math.random() * 100}%;
+                                left: ${Math.random() * 100}%;
+                                animation-delay: ${Math.random() * 3}s;
+                                animation-duration: ${2 + Math.random() * 3}s;
+                            "></div>
+                        `).join('')}
+                    </div>
+
+                    <div class="max-w-6xl mx-auto relative z-10">
+                        <!-- Header -->
+                        <div class="text-center mb-8 animate-fade-in">
+                            <div class="flex items-center justify-center gap-3 mb-4">
+                                ${BookOpenIcon('w-8 h-8 text-pink-400')}
+                                <h1 class="text-4xl md:text-6xl font-bold text-white font-playfair">
+                                    37 Days of Love
+                                </h1>
+                                ${BookOpenIcon('w-8 h-8 text-pink-400')}
+                            </div>
+                            <p class="text-purple-300 text-xl font-cormorant">
+                                A love story for Jami, written by Geo
+                            </p>
+                        </div>
+
+                        <!-- Countdown -->
+                        <div class="mb-10 flex justify-center animate-slide-up">
+                            <div class="bg-white/95 rounded-2xl p-6 shadow-2xl max-w-2xl w-full">
+                                <div class="flex items-center justify-center gap-2 mb-4">
+                                    ${CalendarIcon('w-6 h-6 text-purple-600')}
+                                    <h3 class="text-xl font-bold text-gray-800 font-cormorant">
+                                        ${t.total <= 0 ? 'Happy Valentine\'s Day!' : 'Countdown to Valentine\'s Day'}
+                                    </h3>
+                                </div>
+                                ${t.total <= 0 ? `
+                                    <div class="text-center py-8">
+                                        <div class="text-6xl mb-4">💕</div>
+                                        <p class="text-2xl text-pink-600 font-playfair font-bold">
+                                            It's Valentine's Day!
+                                        </p>
+                                    </div>
+                                ` : `
+                                    <div class="grid grid-cols-4 gap-3">
+                                        ${[
+                                            { value: t.days, label: 'Days', color: 'from-pink-500 to-pink-600' },
+                                            { value: t.hours, label: 'Hours', color: 'from-purple-500 to-purple-600' },
+                                            { value: t.minutes, label: 'Minutes', color: 'from-green-500 to-green-600' },
+                                            { value: t.seconds, label: 'Seconds', color: 'from-pink-500 to-pink-600' }
+                                        ].map(item => `
+                                            <div class="text-center">
+                                                <div class="bg-gradient-to-br ${item.color} rounded-xl p-4 mb-2 shadow-lg">
+                                                    <div class="text-3xl md:text-4xl font-bold text-white font-playfair">
+                                                        ${String(item.value).padStart(2, '0')}
+                                                    </div>
+                                                </div>
+                                                <div class="text-sm font-semibold text-gray-600 font-cormorant">
+                                                    ${item.label}
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+
+                        <!-- Book/Page viewer -->
+                        <div class="relative max-w-4xl mx-auto">
+                            <div class="bg-white/95 rounded-3xl shadow-2xl overflow-hidden transition-600 ${state.isFlipping ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}" style="min-height: 500px;">
+                                
+                                <!-- Current letter page -->
+                                <div class="p-8 md:p-12">
+                                    <!-- Page number and navigation -->
+                                    <div class="flex items-center justify-between mb-6">
+                                        <button
+                                            onclick="state.currentPage > 0 && goToPage(state.currentPage - 1)"
+                                            ${state.currentPage === 0 ? 'disabled' : ''}
+                                            class="flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:bg-purple-200 transition-all font-cormorant"
+                                        >
+                                            ${ChevronLeftIcon('w-5 h-5')}
+                                            Previous
+                                        </button>
+                                        
+                                        <div class="text-center">
+                                            <div class="text-sm text-gray-500 mb-1 font-cormorant">
+                                                Letter ${state.currentPage + 1} of ${letters.length}
+                                            </div>
+                                            <div class="text-2xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent font-playfair">
+                                                ${letter.title}
+                                            </div>
+                                        </div>
+                                        
+                                        <button
+                                            onclick="state.currentPage < ${letters.length - 1} && goToPage(state.currentPage + 1)"
+                                            ${state.currentPage === letters.length - 1 ? 'disabled' : ''}
+                                            class="flex items-center gap-2 px-4 py-2 bg-pink-100 text-pink-700 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:bg-pink-200 transition-all font-cormorant"
+                                        >
+                                            Next
+                                            ${ChevronRightIcon('w-5 h-5')}
+                                        </button>
+                                    </div>
+
+                                    <!-- Letter content -->
+                                    <div class="prose prose-lg max-w-none">
+                                        <div class="bg-gradient-to-br from-pink-50 to-purple-50 rounded-2xl p-8 border-2 border-pink-100">
+                                            <div class="flex items-center gap-2 mb-4">
+                                                ${HeartIcon('w-5 h-5 text-pink-500', 'currentColor')}
+                                                <span class="text-sm text-pink-600 font-semibold font-cormorant">
+                                                    Day ${letter.day}
+                                                </span>
+                                            </div>
+                                            <p class="text-gray-700 text-lg leading-relaxed whitespace-pre-wrap font-cormorant">
+                                                ${letter.content}
+                                            </p>
+                                            <div class="mt-6 pt-6 border-t border-pink-200">
+                                                <div class="text-right">
+                                                    <div class="text-sm text-gray-500 font-cormorant">
+                                                        With all my love,
+                                                    </div>
+                                                    <div class="text-2xl font-bold text-pink-600 mt-1 font-playfair">
+                                                        Geo
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Page dots indicator -->
+                                <div class="flex items-center justify-center gap-2 pb-6 px-4 flex-wrap">
+                                    ${letters.map((_, idx) => `
+                                        <button
+                                            onclick="goToPage(${idx})"
+                                            class="transition-all duration-300 rounded-full ${
+                                                idx === state.currentPage 
+                                                    ? 'w-8 h-2 bg-pink-500' 
+                                                    : 'w-2 h-2 bg-gray-300 hover:bg-gray-400'
+                                            }"
+                                            aria-label="Go to letter ${idx + 1}"
+                                        ></button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="mt-8 text-center text-purple-300 font-cormorant">
+                            Made with 💖 by Geo for Jami
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Main render function
+        function render() {
+            const app = document.getElementById('app');
+            
+            if (!state.isDateUnlocked) {
+                app.innerHTML = renderDateLockScreen();
+            } else if (!state.isPasswordUnlocked) {
+                app.innerHTML = renderPasswordScreen();
+            } else {
+                app.innerHTML = renderMainContent();
+            }
+        }
+
+        // Initialize
+        setInterval(updateTimers, 1000);
+        updateTimers();
+    </script>
+</body>
+</html>
