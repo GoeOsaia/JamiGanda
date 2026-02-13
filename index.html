@@ -85,7 +85,12 @@
         
         @keyframes bounce-gentle {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-4px); }
+        }
+        
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.02); }
         }
         
         @keyframes shake {
@@ -95,8 +100,8 @@
         }
         
         @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 0.8; }
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
         }
         
         @keyframes fade-in {
@@ -110,30 +115,30 @@
         }
 
         @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(236, 72, 153, 0.8); }
+            0%, 100% { box-shadow: 0 0 20px rgba(233, 30, 99, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(233, 30, 99, 0.5); }
         }
 
         @keyframes heartbeat {
             0%, 100% { transform: scale(1); }
-            10%, 30% { transform: scale(1.1); }
+            10%, 30% { transform: scale(1.05); }
             20%, 40% { transform: scale(1); }
         }
 
         @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(236, 72, 153, 0.6); }
+            0%, 100% { box-shadow: 0 0 20px rgba(233, 30, 99, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(233, 30, 99, 0.4); }
         }
 
         /* Page flip animation */
         @keyframes pageFlip {
-            0% { transform: perspective(1000px) rotateY(0deg); }
-            50% { transform: perspective(1000px) rotateY(-90deg) scale(0.9); opacity: 0.5; }
-            100% { transform: perspective(1000px) rotateY(0deg); }
+            0% { transform: perspective(1000px) rotateY(0deg) scale(1); opacity: 1; }
+            50% { transform: perspective(1000px) rotateY(-45deg) scale(0.95); opacity: 0.7; }
+            100% { transform: perspective(1000px) rotateY(0deg) scale(1); opacity: 1; }
         }
 
         .page-flip {
-            animation: pageFlip 0.8s ease-in-out;
+            animation: pageFlip 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Confetti animation */
@@ -165,7 +170,11 @@
         }
         
         .animate-bounce-gentle {
-            animation: bounce-gentle 2s ease-in-out infinite;
+            animation: bounce-gentle 3s ease-in-out infinite;
+        }
+        
+        .animate-pulse-soft {
+            animation: pulse-soft 3s ease-in-out infinite;
         }
         
         .animate-shake {
@@ -193,7 +202,7 @@
         }
 
         .animate-pulse-glow {
-            animation: pulse-glow 2s ease-in-out infinite;
+            animation: pulse-glow 3s ease-in-out infinite;
         }
 
         /* Tulip styles */
@@ -288,7 +297,8 @@
             height: 4px;
             background: #fbbf24;
             border-radius: 50%;
-            animation: twinkle 2s ease-in-out infinite;
+            animation: twinkle 4s ease-in-out infinite;
+            opacity: 0.6;
         }
 
         /* Paper texture for letters */
@@ -621,11 +631,11 @@
             return `
                 <div class="min-h-screen flex flex-col items-center justify-center p-8 smooth screen-transition" style="background: linear-gradient(135deg, #fff8f0 0%, #f8f0f8 25%, #f0f8f4 50%, #f8f0f8 75%, #fff8f0 100%);">
                     <!-- Sparkles -->
-                    ${Array(20).fill(0).map((_, i) => {
+                    ${Array(15).fill(0).map((_, i) => {
                         const top = Math.random() * 100;
                         const left = Math.random() * 100;
-                        const delay = Math.random() * 2;
-                        const duration = 1 + Math.random() * 2;
+                        const delay = Math.random() * 3;
+                        const duration = 3 + Math.random() * 2;
                         return `<div class="sparkle" style="top:${top}%;left:${left}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
                     }).join('')}
                     
@@ -678,14 +688,16 @@
                 <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden smooth screen-transition" style="background: linear-gradient(135deg, #fff8f0 0%, #f8f0f8 25%, #f0f8f4 50%, #f8f0f8 75%, #fff8f0 100%);">
                     <!-- Blurred background elements -->
                     <div class="absolute inset-0 overflow-hidden blur-background">
-                        ${Array(30).fill(0).map((_, i) => `
-                            <div class="absolute rounded-full bg-white animate-twinkle" style="
-                                width: ${1 + Math.random() * 2}px;
-                                height: ${1 + Math.random() * 2}px;
+                        ${Array(20).fill(0).map((_, i) => `
+                            <div class="absolute rounded-full animate-twinkle" style="
+                                width: ${2 + Math.random() * 2}px;
+                                height: ${2 + Math.random() * 2}px;
                                 top: ${Math.random() * 100}%;
                                 left: ${Math.random() * 100}%;
-                                animation-delay: ${Math.random() * 3}s;
-                                animation-duration: ${2 + Math.random() * 3}s;
+                                animation-delay: ${Math.random() * 4}s;
+                                animation-duration: ${4 + Math.random() * 2}s;
+                                background: ${i % 2 === 0 ? '#f8bbd0' : '#a5d6a7'};
+                                opacity: 0.5;
                             "></div>
                         `).join('')}
                     </div>
@@ -695,7 +707,7 @@
                         <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-8 md:p-14 shadow-2xl border border-white/20 animate-fade-in">
                             <!-- Clock icon -->
                             <div class="inline-flex items-center justify-center w-24 md:w-32 h-24 md:h-32 bg-gradient-to-br from-pink-400 via-purple-400 to-green-400 rounded-full mb-8 shadow-2xl animate-pulse-glow" style="background: linear-gradient(135deg, #f06292, #ba68c8, #81c784);">
-                                ${ClockIcon('w-12 md:w-16 h-12 md:h-16 text-white animate-bounce-gentle')}
+                                ${ClockIcon('w-12 md:w-16 h-12 md:h-16 text-white')}
                             </div>
 
                             <!-- Title -->
@@ -736,16 +748,16 @@
                             <!-- Message -->
                             <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-white/30 shadow-lg">
                                 <p class="text-gray-800 text-base md:text-xl font-cormorant leading-relaxed" style="color: #5a5a5a;">
-                                    Something special is waiting for you, Jami 💕<br>
+                                    Something special is waiting for you boiii, Jami:P 💕<br>
                                     <span style="color: #66bb6a; font-weight: 600;">Just a little more patience...</span>
                                 </p>
                             </div>
 
                             <!-- Hearts -->
                             <div class="mt-8 flex items-center justify-center gap-3">
-                                <div style="color: #f06292;">${HeartIcon('w-5 md:w-6 h-5 md:h-6 animate-pulse', 'currentColor')}</div>
-                                <div style="color: #66bb6a;">${HeartIcon('w-6 md:w-8 h-6 md:h-8 animate-pulse', 'currentColor')}</div>
-                                <div style="color: #f06292;">${HeartIcon('w-5 md:w-6 h-5 md:h-6 animate-pulse', 'currentColor')}</div>
+                                <div style="color: #f06292;">${HeartIcon('w-5 md:w-6 h-5 md:h-6 animate-pulse-soft', 'currentColor')}</div>
+                                <div style="color: #66bb6a;">${HeartIcon('w-6 md:w-8 h-6 md:h-8 animate-pulse-soft', 'currentColor')}</div>
+                                <div style="color: #f06292;">${HeartIcon('w-5 md:w-6 h-5 md:h-6 animate-pulse-soft', 'currentColor')}</div>
                             </div>
 
                             <!-- Continue button -->
@@ -793,7 +805,7 @@
                                 <div class="relative inline-block mb-6">
                                     <div class="absolute inset-0 rounded-full blur-2xl opacity-40 animate-pulse" style="background: #66bb6a;"></div>
                                     <div class="relative flex items-center justify-center w-24 md:w-28 h-24 md:h-28 rounded-full shadow-xl animate-pulse-glow" style="background: linear-gradient(135deg, #81c784, #66bb6a);">
-                                        ${LockIcon('w-12 md:w-14 h-12 md:h-14 text-white animate-bounce-gentle')}
+                                        ${LockIcon('w-12 md:w-14 h-12 md:h-14 text-white')}
                                     </div>
                                 </div>
 
@@ -803,9 +815,9 @@
                                 </h1>
                                 
                                 <div class="flex items-center justify-center gap-2 mb-4">
-                                    <div style="color: #f06292;">${HeartIcon('w-4 md:w-5 h-4 md:h-5 animate-pulse', 'currentColor')}</div>
-                                    <div style="color: #66bb6a;">${HeartIcon('w-5 md:w-6 h-5 md:h-6 animate-pulse', 'currentColor')}</div>
-                                    <div style="color: #f06292;">${HeartIcon('w-4 md:w-5 h-4 md:h-5 animate-pulse', 'currentColor')}</div>
+                                    <div style="color: #f06292;">${HeartIcon('w-4 md:w-5 h-4 md:h-5 animate-pulse-soft', 'currentColor')}</div>
+                                    <div style="color: #66bb6a;">${HeartIcon('w-5 md:w-6 h-5 md:h-6 animate-pulse-soft', 'currentColor')}</div>
+                                    <div style="color: #f06292;">${HeartIcon('w-4 md:w-5 h-4 md:h-5 animate-pulse-soft', 'currentColor')}</div>
                                 </div>
 
                                 <p class="text-gray-600 text-base md:text-lg leading-relaxed font-cormorant">
@@ -854,17 +866,19 @@
             const progress = ((state.currentPage + 1) / letters.length) * 100;
             
             return `
-                <div class="min-h-screen p-4 md:p-8 relative overflow-hidden transition-opacity duration-500 ${opacity} screen-transition" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+                <div class="min-h-screen p-4 md:p-8 relative overflow-hidden transition-opacity duration-500 ${opacity} screen-transition" style="background: linear-gradient(135deg, #fff8f0 0%, #f8f0f8 20%, #f0f8f4 40%, #f8f0f8 60%, #fff5f5 80%, #fff8f0 100%);">
                     <!-- Decorative background -->
                     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                        ${Array(30).fill(0).map((_, i) => `
-                            <div class="absolute rounded-full bg-white animate-twinkle" style="
-                                width: ${1 + Math.random() * 2}px;
-                                height: ${1 + Math.random() * 2}px;
+                        ${Array(20).fill(0).map((_, i) => `
+                            <div class="absolute rounded-full animate-twinkle" style="
+                                width: ${2 + Math.random() * 3}px;
+                                height: ${2 + Math.random() * 3}px;
                                 top: ${Math.random() * 100}%;
                                 left: ${Math.random() * 100}%;
-                                animation-delay: ${Math.random() * 3}s;
-                                animation-duration: ${2 + Math.random() * 3}s;
+                                animation-delay: ${Math.random() * 4}s;
+                                animation-duration: ${4 + Math.random() * 2}s;
+                                background: ${i % 3 === 0 ? '#f8bbd0' : i % 3 === 1 ? '#a5d6a7' : '#e1bee7'};
+                                opacity: 0.4;
                             "></div>
                         `).join('')}
                     </div>
@@ -874,29 +888,29 @@
                         <div class="text-center mb-6 md:mb-8 animate-fade-in">
                             <div class="flex items-center justify-center gap-2 md:gap-3 mb-4">
                                 <div style="color: #f06292;">${BookOpenIcon('w-6 md:w-8 h-6 md:h-8')}</div>
-                                <h1 class="text-3xl md:text-6xl font-bold text-white font-playfair">
+                                <h1 class="text-3xl md:text-6xl font-bold font-playfair" style="background: linear-gradient(135deg, #e91e63, #ba68c8, #66bb6a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
                                     37 Days of Love
                                 </h1>
                                 <div style="color: #f06292;">${BookOpenIcon('w-6 md:w-8 h-6 md:h-8')}</div>
                             </div>
                             <p class="text-lg md:text-xl font-cormorant" style="color: #ba68c8;">
-                                A love story for Jami, written by Geo
+                                 Para sa'yo ito Jami, hihi sana maging masaya araw mo.
                             </p>
                         </div>
 
                         <!-- Progress bar -->
                         <div class="mb-6 md:mb-10 animate-slide-up">
-                            <div class="bg-white/10 rounded-full h-2 md:h-3 overflow-hidden max-w-2xl mx-auto">
+                            <div class="rounded-full h-2 md:h-3 overflow-hidden max-w-2xl mx-auto shadow-inner" style="background: rgba(233, 30, 99, 0.1);">
                                 <div class="progress-bar" style="width: ${progress}%"></div>
                             </div>
-                            <p class="text-center text-sm md:text-base mt-2 font-cormorant" style="color: #ba68c8;">
+                            <p class="text-center text-sm md:text-base mt-2 font-cormorant" style="color: #ba68c8; font-weight: 500;">
                                 ${state.currentPage + 1} of ${letters.length} letters
                             </p>
                         </div>
 
                         <!-- Countdown -->
                         <div class="mb-8 md:mb-10 flex justify-center animate-slide-up">
-                            <div class="bg-white/95 rounded-2xl p-4 md:p-6 shadow-2xl max-w-2xl w-full">
+                            <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-xl max-w-2xl w-full border border-white/50">
                                 <div class="flex items-center justify-center gap-2 mb-4">
                                     <div style="color: #ba68c8;">${CalendarIcon('w-5 md:w-6 h-5 md:h-6')}</div>
                                     <h3 class="text-lg md:text-xl font-bold text-gray-800 font-cormorant">
@@ -936,7 +950,7 @@
 
                         <!-- Book/Page viewer -->
                         <div class="relative max-w-4xl mx-auto">
-                            <div class="bg-white/95 rounded-3xl shadow-2xl overflow-hidden transition-600 ${state.isFlipping ? 'page-flip scale-95 opacity-50' : 'scale-100 opacity-100'}" style="min-height: 400px;">
+                            <div class="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden transition-600 ${state.isFlipping ? 'page-flip' : ''}" style="min-height: 400px; border: 1px solid rgba(255, 255, 255, 0.5);">
                                 
                                 <!-- Current letter page -->
                                 <div class="p-6 md:p-12">
