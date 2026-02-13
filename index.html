@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>This is for you Jami :))</title>
+    <title>Jamella</title>
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
@@ -29,6 +29,34 @@
 
         .font-cormorant {
             font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Smooth transitions */
+        .smooth { transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .fade-enter { opacity: 0; transform: translateY(-30px); }
+        .fade-enter-active { opacity: 1; transform: translateY(0); }
+
+        /* Tulip animations */
+        @keyframes grow-tulip {
+            0% { transform: translateY(100px) scale(0); opacity: 0; }
+            60% { transform: translateY(0) scale(1.1); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        
+        @keyframes bloom {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes sway {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
         /* Animations */
@@ -80,6 +108,11 @@
             10%, 30% { transform: scale(1.1); }
             20%, 40% { transform: scale(1); }
         }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(236, 72, 153, 0.6); }
+        }
         
         .animate-float-slow {
             animation: float-slow linear infinite;
@@ -117,6 +150,105 @@
             animation: heartbeat 1.5s ease-in-out infinite;
         }
 
+        .animate-pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        /* Tulip styles */
+        .tulip {
+            position: relative;
+            width: 60px;
+            height: 90px;
+            cursor: pointer;
+            animation: grow-tulip 1.5s ease-out forwards;
+            transform-origin: bottom center;
+        }
+        
+        .tulip:hover {
+            animation: float 1s ease-in-out infinite, sway 2s ease-in-out infinite;
+        }
+        
+        .tulip.clicked {
+            animation: bloom 0.8s ease-out forwards;
+        }
+        
+        .tulip-petal {
+            position: absolute;
+            width: 30px;
+            height: 45px;
+            border-radius: 50% 50% 50% 0;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+        
+        .tulip-pink .tulip-petal.left {
+            left: 0;
+            background: linear-gradient(135deg, #fda4af, #fb7185);
+            transform: rotate(-25deg);
+        }
+        
+        .tulip-pink .tulip-petal.center {
+            left: 15px;
+            background: linear-gradient(135deg, #fb7185, #f43f5e);
+            z-index: 1;
+        }
+
+        .tulip-pink .tulip-petal.right {
+            right: 0;
+            background: linear-gradient(135deg, #fda4af, #fb7185);
+            transform: rotate(25deg);
+        }
+        
+        .tulip-green .tulip-petal.left {
+            left: 0;
+            background: linear-gradient(135deg, #86efac, #4ade80);
+            transform: rotate(-25deg);
+        }
+        
+        .tulip-green .tulip-petal.center {
+            left: 15px;
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            z-index: 1;
+        }
+        
+        .tulip-green .tulip-petal.right {
+            right: 0;
+            background: linear-gradient(135deg, #86efac, #4ade80);
+            transform: rotate(25deg);
+        }
+        
+        .tulip-stem {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 70px;
+            background: linear-gradient(180deg, #86efac, #22c55e);
+            border-radius: 3px;
+        }
+        
+        .tulip-leaf {
+            position: absolute;
+            bottom: 30px;
+            width: 30px;
+            height: 18px;
+            background: linear-gradient(90deg, #86efac, #22c55e);
+            border-radius: 50%;
+        }
+        
+        .tulip-leaf.left { left: -20px; transform: rotate(-35deg); }
+        .tulip-leaf.right { right: -20px; transform: rotate(35deg); }
+
+        /* Sparkles */
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fbbf24;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
         .blur-background {
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -129,6 +261,10 @@
         /* Smooth scroll */
         html {
             scroll-behavior: smooth;
+        }
+
+        input:focus {
+            outline: none;
         }
     </style>
 </head>
@@ -187,6 +323,8 @@
 
         // State
         let state = {
+            screen: 'tulips', // tulips -> dateLock -> password -> letters
+            tulipsClicked: 0,
             isDateUnlocked: false,
             isPasswordUnlocked: false,
             password: '',
@@ -270,7 +408,23 @@
                 state.isDateUnlocked = true;
             }
             
-            render();
+            if (state.screen === 'dateLock' || state.screen === 'letters') {
+                render();
+            }
+        }
+
+        // Handle tulip click
+        function handleTulipClick() {
+            if (state.tulipsClicked < 3) {
+                state.tulipsClicked++;
+                if (state.tulipsClicked === 3) {
+                    setTimeout(() => {
+                        state.screen = 'dateLock';
+                        render();
+                    }, 1000);
+                }
+                render();
+            }
         }
 
         // Handle password submit
@@ -279,6 +433,7 @@
             if (state.password === 'Jamella') {
                 state.isPasswordUnlocked = true;
                 setTimeout(() => {
+                    state.screen = 'letters';
                     state.showContent = true;
                     render();
                 }, 300);
@@ -305,11 +460,66 @@
             render();
         }
 
+        // Render tulips screen
+        function renderTulipsScreen() {
+            return `
+                <div class="min-h-screen flex flex-col items-center justify-center p-8 smooth" style="background: linear-gradient(135deg, #fce7f3 0%, #dcfce7 50%, #fce7f3 100%);">
+                    <!-- Sparkles -->
+                    ${Array(20).fill(0).map((_, i) => {
+                        const top = Math.random() * 100;
+                        const left = Math.random() * 100;
+                        const delay = Math.random() * 2;
+                        const duration = 1 + Math.random() * 2;
+                        return `<div class="sparkle" style="top:${top}%;left:${left}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
+                    }).join('')}
+                    
+                    <div class="text-center mb-16 smooth fade-enter-active">
+                        <h1 class="text-6xl md:text-8xl font-bold mb-4 font-playfair" style="color: #f43f5e;">For Jami</h1>
+                        <p class="text-2xl md:text-3xl" style="color: #22c55e;">Click the tulips to begin 🌷</p>
+                    </div>
+                    
+                    <div class="flex items-end gap-16 mb-8">
+                        <div class="tulip tulip-pink ${state.tulipsClicked > 0 ? 'clicked' : ''}" onclick="handleTulipClick()" style="animation-delay: 0s;">
+                            <div class="tulip-petal left"></div>
+                            <div class="tulip-petal center"></div>
+                            <div class="tulip-petal right"></div>
+                            <div class="tulip-stem">
+                                <div class="tulip-leaf left"></div>
+                                <div class="tulip-leaf right"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="tulip tulip-green ${state.tulipsClicked > 1 ? 'clicked' : ''}" onclick="handleTulipClick()" style="animation-delay: 0.3s;">
+                            <div class="tulip-petal left"></div>
+                            <div class="tulip-petal center"></div>
+                            <div class="tulip-petal right"></div>
+                            <div class="tulip-stem">
+                                <div class="tulip-leaf left"></div>
+                                <div class="tulip-leaf right"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="tulip tulip-pink ${state.tulipsClicked > 2 ? 'clicked' : ''}" onclick="handleTulipClick()" style="animation-delay: 0.6s;">
+                            <div class="tulip-petal left"></div>
+                            <div class="tulip-petal center"></div>
+                            <div class="tulip-petal right"></div>
+                            <div class="tulip-stem">
+                                <div class="tulip-leaf left"></div>
+                                <div class="tulip-leaf right"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-lg" style="color: #f43f5e;">${state.tulipsClicked} / 3 tulips bloomed</p>
+                </div>
+            `;
+        }
+
         // Render date lock screen
         function renderDateLockScreen() {
             const t = state.timeToUnlock;
             return `
-                <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+                <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden smooth" style="background: linear-gradient(135deg, #fce7f3 0%, #dcfce7 50%, #fce7f3 100%);">
                     <!-- Blurred background elements -->
                     <div class="absolute inset-0 overflow-hidden blur-background">
                         ${Array(30).fill(0).map((_, i) => `
@@ -328,20 +538,20 @@
                     <div class="relative z-10 text-center max-w-2xl mx-auto">
                         <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-10 md:p-14 shadow-2xl border border-white/20 animate-fade-in">
                             <!-- Clock icon -->
-                            <div class="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-pink-500 via-purple-500 to-green-500 rounded-full mb-8 shadow-2xl animate-glow">
+                            <div class="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-pink-500 via-purple-500 to-green-500 rounded-full mb-8 shadow-2xl animate-pulse-glow">
                                 ${ClockIcon('w-16 h-16 text-white animate-bounce-gentle')}
                             </div>
 
                             <!-- Title -->
-                            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 font-playfair animate-heartbeat">
-                                Coming Soon
+                            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 font-playfair animate-heartbeat" style="color: #f43f5e;">
+                                Almost There!
                             </h1>
 
                             <div class="mb-8">
-                                <p class="text-2xl md:text-3xl text-purple-300 mb-2 font-cormorant">
-                                    Wait until February 14, 2026
+                                <p class="text-2xl md:text-3xl mb-2 font-cormorant" style="color: #22c55e;">
+                                    February 14, 2026
                                 </p>
-                                <p class="text-lg text-pink-300 font-cormorant">
+                                <p class="text-lg font-cormorant" style="color: #f43f5e;">
                                     at 12:00 AM
                                 </p>
                             </div>
@@ -350,9 +560,9 @@
                             <div class="grid grid-cols-4 gap-4 mb-8">
                                 ${[
                                     { value: t.days, label: 'Days', color: 'from-pink-500 to-pink-600' },
-                                    { value: t.hours, label: 'Hours', color: 'from-purple-500 to-purple-600' },
-                                    { value: t.minutes, label: 'Minutes', color: 'from-green-500 to-green-600' },
-                                    { value: t.seconds, label: 'Seconds', color: 'from-pink-500 to-pink-600' }
+                                    { value: t.hours, label: 'Hours', color: 'from-green-500 to-green-600' },
+                                    { value: t.minutes, label: 'Minutes', color: 'from-pink-500 to-pink-600' },
+                                    { value: t.seconds, label: 'Seconds', color: 'from-green-500 to-green-600' }
                                 ].map(item => `
                                     <div class="text-center">
                                         <div class="bg-gradient-to-br ${item.color} rounded-2xl p-4 md:p-6 mb-2 shadow-xl">
@@ -371,15 +581,22 @@
                             <div class="bg-white/5 rounded-2xl p-6 border border-white/10">
                                 <p class="text-white/90 text-lg md:text-xl font-cormorant leading-relaxed">
                                     Something special is waiting for you, Jami 💕<br>
-                                    <span class="text-pink-300">Just a little more patience...</span>
+                                    <span style="color: #22c55e;">Just a little more patience...</span>
                                 </p>
                             </div>
 
                             <!-- Hearts -->
                             <div class="mt-8 flex items-center justify-center gap-3">
                                 ${HeartIcon('w-6 h-6 text-pink-400 animate-pulse', 'currentColor')}
-                                ${HeartIcon('w-8 h-8 text-purple-400 animate-pulse', 'currentColor')}
-                                ${HeartIcon('w-6 h-6 text-green-400 animate-pulse', 'currentColor')}
+                                ${HeartIcon('w-8 h-8 text-green-400 animate-pulse', 'currentColor')}
+                                ${HeartIcon('w-6 h-6 text-pink-400 animate-pulse', 'currentColor')}
+                            </div>
+
+                            <!-- Continue button -->
+                            <div class="mt-8">
+                                <button onclick="state.screen = 'password'; render();" class="px-8 py-4 rounded-full text-white text-lg font-bold shadow-lg smooth hover:scale-105 font-cormorant" style="background: linear-gradient(135deg, #fb7185, #4ade80);">
+                                    Continue Anyway 💌
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -390,7 +607,7 @@
         // Render password screen
         function renderPasswordScreen() {
             return `
-                <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" style="background: linear-gradient(135deg, #2d5016 0%, #4a7c59 50%, #2d5016 100%);">
+                <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden smooth" style="background: linear-gradient(135deg, #fce7f3 0%, #dcfce7 50%, #fce7f3 100%);">
                     <!-- Floating hearts -->
                     <div class="absolute inset-0 pointer-events-none overflow-hidden">
                         ${Array(20).fill(0).map((_, i) => `
@@ -409,7 +626,7 @@
                     <!-- Glowing orbs -->
                     <div class="absolute inset-0 overflow-hidden pointer-events-none">
                         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-green-300 rounded-full opacity-10 blur-3xl animate-pulse-slow"></div>
-                        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-300 rounded-full opacity-10 blur-3xl animate-pulse-slow" style="animation-delay: 2s;"></div>
+                        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-300 rounded-full opacity-10 blur-3xl animate-pulse-slow" style="animation-delay: 2s;"></div>
                     </div>
 
                     <!-- Lock card -->
@@ -419,7 +636,7 @@
                                 <!-- Lock icon -->
                                 <div class="relative inline-block mb-6">
                                     <div class="absolute inset-0 bg-green-500 rounded-full blur-2xl opacity-40 animate-pulse"></div>
-                                    <div class="relative flex items-center justify-center w-28 h-28 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full shadow-xl">
+                                    <div class="relative flex items-center justify-center w-28 h-28 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full shadow-xl animate-pulse-glow">
                                         ${LockIcon('w-14 h-14 text-white animate-bounce-gentle')}
                                     </div>
                                 </div>
@@ -640,11 +857,13 @@
         function render() {
             const app = document.getElementById('app');
             
-            if (!state.isDateUnlocked) {
+            if (state.screen === 'tulips') {
+                app.innerHTML = renderTulipsScreen();
+            } else if (state.screen === 'dateLock') {
                 app.innerHTML = renderDateLockScreen();
-            } else if (!state.isPasswordUnlocked) {
+            } else if (state.screen === 'password') {
                 app.innerHTML = renderPasswordScreen();
-            } else {
+            } else if (state.screen === 'letters') {
                 app.innerHTML = renderMainContent();
             }
         }
@@ -652,6 +871,7 @@
         // Initialize
         setInterval(updateTimers, 1000);
         updateTimers();
+        render();
     </script>
 </body>
 </html>
