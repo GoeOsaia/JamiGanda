@@ -562,8 +562,35 @@
                 state.isDateUnlocked = true;
             }
             
-            if (state.screen === 'dateLock' || state.screen === 'letters') {
-                render();
+            // Only update timer numbers, don't re-render entire screen
+            if (state.screen === 'dateLock') {
+                updateTimerDisplay();
+            } else if (state.screen === 'letters') {
+                updateLettersTimer();
+            }
+        }
+        
+        // Update only timer numbers on date lock screen
+        function updateTimerDisplay() {
+            const t = state.timeToUnlock;
+            const timerElements = document.querySelectorAll('[data-timer]');
+            if (timerElements.length === 4) {
+                const values = [t.days, t.hours, t.minutes, t.seconds];
+                timerElements.forEach((el, idx) => {
+                    el.textContent = String(values[idx]).padStart(2, '0');
+                });
+            }
+        }
+        
+        // Update only timer numbers on letters screen
+        function updateLettersTimer() {
+            const t = state.timeToValentines;
+            const timerElements = document.querySelectorAll('[data-letters-timer]');
+            if (timerElements.length === 4) {
+                const values = [t.days, t.hours, t.minutes, t.seconds];
+                timerElements.forEach((el, idx) => {
+                    el.textContent = String(values[idx]).padStart(2, '0');
+                });
             }
         }
 
@@ -631,13 +658,9 @@
             return `
                 <div class="min-h-screen flex flex-col items-center justify-center p-8 smooth screen-transition" style="background: linear-gradient(135deg, #fff8f0 0%, #f8f0f8 25%, #f0f8f4 50%, #f8f0f8 75%, #fff8f0 100%);">
                     <!-- Sparkles -->
-                    ${Array(15).fill(0).map((_, i) => {
-                        const top = Math.random() * 100;
-                        const left = Math.random() * 100;
-                        const delay = Math.random() * 3;
-                        const duration = 3 + Math.random() * 2;
-                        return `<div class="sparkle" style="top:${top}%;left:${left}%;animation-delay:${delay}s;animation-duration:${duration}s;"></div>`;
-                    }).join('')}
+                    ${[10, 20, 30, 40, 50, 60, 70, 80, 90].map((top, i) => `
+                        <div class="sparkle" style="top:${top}%;left:${10 + i * 10}%;animation-delay:${i * 0.5}s;animation-duration:4s;"></div>
+                    `).join('')}
                     
                     <div class="text-center mb-16 smooth fade-enter-active">
                         <h1 class="text-5xl md:text-8xl font-bold mb-4 font-playfair" style="background: linear-gradient(135deg, #e91e63, #ba68c8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">For Jami</h1>
@@ -688,16 +711,14 @@
                 <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden smooth screen-transition" style="background: linear-gradient(135deg, #fff8f0 0%, #f8f0f8 25%, #f0f8f4 50%, #f8f0f8 75%, #fff8f0 100%);">
                     <!-- Blurred background elements -->
                     <div class="absolute inset-0 overflow-hidden blur-background">
-                        ${Array(20).fill(0).map((_, i) => `
-                            <div class="absolute rounded-full animate-twinkle" style="
-                                width: ${2 + Math.random() * 2}px;
-                                height: ${2 + Math.random() * 2}px;
-                                top: ${Math.random() * 100}%;
-                                left: ${Math.random() * 100}%;
-                                animation-delay: ${Math.random() * 4}s;
-                                animation-duration: ${4 + Math.random() * 2}s;
+                        ${[10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map((top, i) => `
+                            <div class="absolute rounded-full" style="
+                                width: 4px;
+                                height: 4px;
+                                top: ${top}%;
+                                left: ${10 + i * 8}%;
                                 background: ${i % 2 === 0 ? '#f8bbd0' : '#a5d6a7'};
-                                opacity: 0.5;
+                                opacity: 0.25;
                             "></div>
                         `).join('')}
                     </div>
@@ -706,12 +727,12 @@
                     <div class="relative z-10 text-center max-w-2xl mx-auto">
                         <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-8 md:p-14 shadow-2xl border border-white/20 animate-fade-in">
                             <!-- Clock icon -->
-                            <div class="inline-flex items-center justify-center w-24 md:w-32 h-24 md:h-32 bg-gradient-to-br from-pink-400 via-purple-400 to-green-400 rounded-full mb-8 shadow-2xl animate-pulse-glow" style="background: linear-gradient(135deg, #f06292, #ba68c8, #81c784);">
+                            <div class="inline-flex items-center justify-center w-24 md:w-32 h-24 md:h-32 rounded-full mb-8 shadow-xl" style="background: linear-gradient(135deg, #f06292, #ba68c8, #81c784);">
                                 ${ClockIcon('w-12 md:w-16 h-12 md:h-16 text-white')}
                             </div>
 
                             <!-- Title -->
-                            <h1 class="text-4xl md:text-7xl font-bold mb-6 font-playfair animate-heartbeat" style="background: linear-gradient(135deg, #e91e63, #ba68c8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                            <h1 class="text-4xl md:text-7xl font-bold mb-6 font-playfair" style="background: linear-gradient(135deg, #e91e63, #ba68c8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
                                 Almost There!
                             </h1>
 
@@ -731,10 +752,10 @@
                                     { value: t.hours, label: 'Hours', gradient: 'linear-gradient(135deg, #81c784, #66bb6a)' },
                                     { value: t.minutes, label: 'Minutes', gradient: 'linear-gradient(135deg, #f06292, #e91e63)' },
                                     { value: t.seconds, label: 'Seconds', gradient: 'linear-gradient(135deg, #81c784, #66bb6a)' }
-                                ].map(item => `
+                                ].map((item, idx) => `
                                     <div class="text-center">
                                         <div class="rounded-xl md:rounded-2xl p-3 md:p-6 mb-2 shadow-xl" style="background: ${item.gradient};">
-                                            <div class="text-2xl md:text-5xl font-bold text-white font-playfair">
+                                            <div class="text-2xl md:text-5xl font-bold text-white font-playfair" data-timer>
                                                 ${String(item.value).padStart(2, '0')}
                                             </div>
                                         </div>
@@ -748,22 +769,22 @@
                             <!-- Message -->
                             <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-white/30 shadow-lg">
                                 <p class="text-gray-800 text-base md:text-xl font-cormorant leading-relaxed" style="color: #5a5a5a;">
-                                    Something special is waiting for you boiii, Jami:P 💕<br>
+                                    Something special is waiting for you, Jami hmm ano kaya 'yun 💕<br>
                                     <span style="color: #66bb6a; font-weight: 600;">Just a little more patience...</span>
                                 </p>
                             </div>
 
                             <!-- Hearts -->
                             <div class="mt-8 flex items-center justify-center gap-3">
-                                <div style="color: #f06292;">${HeartIcon('w-5 md:w-6 h-5 md:h-6 animate-pulse-soft', 'currentColor')}</div>
-                                <div style="color: #66bb6a;">${HeartIcon('w-6 md:w-8 h-6 md:h-8 animate-pulse-soft', 'currentColor')}</div>
-                                <div style="color: #f06292;">${HeartIcon('w-5 md:w-6 h-5 md:h-6 animate-pulse-soft', 'currentColor')}</div>
+                                <div style="color: #f06292;">${HeartIcon('w-5 md:w-6 h-5 md:h-6', 'currentColor')}</div>
+                                <div style="color: #66bb6a;">${HeartIcon('w-6 md:w-8 h-6 md:h-8', 'currentColor')}</div>
+                                <div style="color: #f06292;">${HeartIcon('w-5 md:w-6 h-5 md:h-6', 'currentColor')}</div>
                             </div>
 
                             <!-- Continue button -->
                             <div class="mt-8">
                                 <button onclick="state.screen = 'password'; render();" class="px-6 md:px-8 py-3 md:py-4 rounded-full text-white text-base md:text-lg font-bold shadow-lg smooth hover:scale-105 font-cormorant ripple" style="background: linear-gradient(135deg, #f06292, #81c784); box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);">
-                                    Continue Anyway 💌
+                                    Continue Anyway:PP
                                 </button>
                             </div>
                         </div>
@@ -821,8 +842,8 @@
                                 </div>
 
                                 <p class="text-gray-600 text-base md:text-lg leading-relaxed font-cormorant">
-                                    Your 37 days of love letters await...<br />
-                                    Enter the password to unlock
+                                    Your 37 days of letters await... HAHAHAHA<br />
+                                    Enter mo jami password to unlock
                                 </p>
                             </div>
 
@@ -845,7 +866,7 @@
                                     class="w-full text-white font-bold py-3 md:py-4 px-6 md:px-8 rounded-2xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 font-cormorant text-base md:text-lg ripple"
                                     style="background: linear-gradient(135deg, #f06292, #81c784); box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);"
                                 >
-                                    Unlock Love Letters 💌
+                                    Unlock Love Letters:P 💌
                                 </button>
                             </form>
 
@@ -869,16 +890,14 @@
                 <div class="min-h-screen p-4 md:p-8 relative overflow-hidden transition-opacity duration-500 ${opacity} screen-transition" style="background: linear-gradient(135deg, #fff8f0 0%, #f8f0f8 20%, #f0f8f4 40%, #f8f0f8 60%, #fff5f5 80%, #fff8f0 100%);">
                     <!-- Decorative background -->
                     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                        ${Array(20).fill(0).map((_, i) => `
-                            <div class="absolute rounded-full animate-twinkle" style="
-                                width: ${2 + Math.random() * 3}px;
-                                height: ${2 + Math.random() * 3}px;
-                                top: ${Math.random() * 100}%;
-                                left: ${Math.random() * 100}%;
-                                animation-delay: ${Math.random() * 4}s;
-                                animation-duration: ${4 + Math.random() * 2}s;
+                        ${[5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95].map((top, i) => `
+                            <div class="absolute rounded-full" style="
+                                width: 3px;
+                                height: 3px;
+                                top: ${top}%;
+                                left: ${5 + (i % 5) * 20}%;
                                 background: ${i % 3 === 0 ? '#f8bbd0' : i % 3 === 1 ? '#a5d6a7' : '#e1bee7'};
-                                opacity: 0.4;
+                                opacity: 0.3;
                             "></div>
                         `).join('')}
                     </div>
@@ -894,7 +913,7 @@
                                 <div style="color: #f06292;">${BookOpenIcon('w-6 md:w-8 h-6 md:h-8')}</div>
                             </div>
                             <p class="text-lg md:text-xl font-cormorant" style="color: #ba68c8;">
-                                 Para sa'yo ito Jami, hihi sana maging masaya araw mo.
+                                A love story for Jami, written by Geo
                             </p>
                         </div>
 
@@ -931,10 +950,10 @@
                                             { value: t.hours, label: 'Hours', gradient: 'linear-gradient(135deg, #ba68c8, #ab47bc)' },
                                             { value: t.minutes, label: 'Minutes', gradient: 'linear-gradient(135deg, #81c784, #66bb6a)' },
                                             { value: t.seconds, label: 'Seconds', gradient: 'linear-gradient(135deg, #f06292, #e91e63)' }
-                                        ].map(item => `
+                                        ].map((item, idx) => `
                                             <div class="text-center">
                                                 <div class="rounded-lg md:rounded-xl p-3 md:p-4 mb-2 shadow-lg" style="background: ${item.gradient};">
-                                                    <div class="text-2xl md:text-4xl font-bold text-white font-playfair">
+                                                    <div class="text-2xl md:text-4xl font-bold text-white font-playfair" data-letters-timer>
                                                         ${String(item.value).padStart(2, '0')}
                                                     </div>
                                                 </div>
@@ -1041,7 +1060,7 @@
 
                         <!-- Footer -->
                         <div class="mt-6 md:mt-8 text-center font-cormorant text-sm md:text-base" style="color: #ba68c8;">
-                            Made with 💖 by Geo for Jami
+                            Made with love ito boii:P
                         </div>
                     </div>
                 </div>
